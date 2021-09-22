@@ -72,4 +72,20 @@ class CustomerServiceIntegrationTest {
         assertEquals(customerDTO.getPhoneNumber(), result.getPhoneNumber());
     }
 
+    @Test
+    void saveWithSameIdentityNumberShouldThrow() {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setIdentityNumber("34867685568");
+        customerDTO.setPhoneNumber("05231231212");
+        customerDTO.setFirstName("John");
+        customerDTO.setLastName("Doe");
+        customerDTO.setSalary(new BigDecimal(1200));
+
+        customerService.saveCustomer(customerDTO);
+
+        // save with same identity number again should throw error
+        Executable executable = () -> customerService.saveCustomer(customerDTO);
+        assertThrows(InputValidationException.class, executable);
+    }
+
 }

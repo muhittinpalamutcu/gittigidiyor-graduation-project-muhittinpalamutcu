@@ -23,14 +23,21 @@ public class CustomerService {
     }
 
     public Customer saveCustomer(CustomerDTO customerDTO) {
-        customerSaveValidations(customerDTO);
+        customerSaveInputValidations(customerDTO);
+
+        Optional<Customer> customerWithSameIdentity = customerRepository.findByIdentityNumber(customerDTO.getIdentityNumber());
+        if (customerWithSameIdentity.isPresent()) {
+            final String errorMessage = "There is already a customer with identity: " + customerDTO.getIdentityNumber();
+            logger.error(errorMessage);
+            throw new InputValidationException(errorMessage);
+        }
 
         Customer savedCustomer = customerRepository.save(customerDTO.dtoToCustomer());
         logger.info("New customer saved with id {}", savedCustomer.getId());
         return savedCustomer;
     }
 
-    private void customerSaveValidations(CustomerDTO customerDTO) {
+    private void customerSaveInputValidations(CustomerDTO customerDTO) {
         Matcher identityMatcher = Pattern.compile("^[1-9]{1}[0-9]{9}[02468]{1}$")
                 .matcher(customerDTO.getIdentityNumber());
         if (!identityMatcher.find()) {
