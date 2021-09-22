@@ -3,7 +3,6 @@ package io.github.muhittinpalamutcu.bankmanagementapp.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -18,7 +17,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(unique = true)
-    private long identityNumber;
+    private String identityNumber;
     private String firstName;
     private String lastName;
     private BigDecimal salary;
