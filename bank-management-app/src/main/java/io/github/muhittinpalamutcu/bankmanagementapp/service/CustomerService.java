@@ -2,6 +2,7 @@ package io.github.muhittinpalamutcu.bankmanagementapp.service;
 
 import io.github.muhittinpalamutcu.bankmanagementapp.dto.CustomerDTO;
 import io.github.muhittinpalamutcu.bankmanagementapp.entity.Customer;
+import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerAccountAlreadyInDesiredStatusException;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerNotFoundException;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.InputValidationException;
 import io.github.muhittinpalamutcu.bankmanagementapp.repository.CustomerRepository;
@@ -37,6 +38,53 @@ public class CustomerService {
         return savedCustomer;
     }
 
+    public Customer findById(long id) {
+        Optional<Customer> maybeCustomer = customerRepository.findById(id);
+        if (maybeCustomer.isPresent()) {
+            return maybeCustomer.get();
+        } else {
+            final String errorMessage = "Customer not found with id: " + id;
+            logger.error(errorMessage);
+            throw new CustomerNotFoundException(errorMessage);
+        }
+    }
+
+    public Customer findByIdentity(String identity) {
+        Optional<Customer> maybeCustomer = customerRepository.findByIdentityNumber(identity);
+        if (maybeCustomer.isPresent()) {
+            return maybeCustomer.get();
+        } else {
+            final String errorMessage = "Customer not found with identity number: " + identity;
+            logger.error(errorMessage);
+            throw new CustomerNotFoundException(errorMessage);
+        }
+    }
+
+    public Customer updateCustomerStatus(long id, boolean isActive) {
+        Optional<Customer> maybeCustomer = customerRepository.findById(id);
+
+        if (maybeCustomer.isEmpty()) {
+            final String errorMessage = "Customer not found with id: " + id;
+            logger.error(errorMessage);
+            throw new CustomerNotFoundException(errorMessage);
+        }
+
+        Customer customer = maybeCustomer.get();
+        final String status = isActive ? "activated" : "deactivated";
+
+        if (customer.isActive() == isActive) {
+            final String errorMessage = "Account with id: " + id + " is already " + status;
+            logger.error(errorMessage);
+            throw new CustomerAccountAlreadyInDesiredStatusException(errorMessage);
+        } else {
+            customer.setActive(isActive);
+            Customer updatedCustomer = customerRepository.save(customer);
+            final String operationResult = "Account with id: " + id + " has been " + status;
+            logger.info(operationResult);
+            return updatedCustomer;
+        }
+    }
+
     private void customerSaveInputValidations(CustomerDTO customerDTO) {
         Matcher identityMatcher = Pattern.compile("^[1-9]{1}[0-9]{9}[02468]{1}$")
                 .matcher(customerDTO.getIdentityNumber());
@@ -52,16 +100,6 @@ public class CustomerService {
             final String errorMessage = "Phone number is not in the correct format";
             logger.error(errorMessage);
             throw new InputValidationException(errorMessage);
-        }
-    }
-
-    public Customer findById(long id) {
-        Optional<Customer> maybeCustomer = customerRepository.findById(id);
-        if (maybeCustomer.isPresent()) {
-            return maybeCustomer.get();
-        } else {
-            logger.error("Customer couldn't found with " + id);
-            throw new CustomerNotFoundException("Customer couldn't found with " + id);
         }
     }
 }

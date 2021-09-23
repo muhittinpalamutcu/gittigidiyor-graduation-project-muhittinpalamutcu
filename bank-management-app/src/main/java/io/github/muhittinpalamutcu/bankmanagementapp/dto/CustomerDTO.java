@@ -16,8 +16,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class CustomerDTO {
 
-    @ApiModelProperty(example = "164259124290")
-    @NotNull(message = "Identity number is mandatory")
+    @ApiModelProperty(example = "29904356366")
+    @NotBlank(message = "Identity number is mandatory")
     private String identityNumber;
 
     @ApiModelProperty(example = "John")
@@ -32,7 +32,7 @@ public class CustomerDTO {
     @NotNull(message = "Salary name is mandatory")
     private BigDecimal salary;
 
-    @ApiModelProperty(example = "4915253892425")
+    @ApiModelProperty(example = "05555252525")
     @NotBlank(message = "Phone number is mandatory")
     private String phoneNumber;
 
