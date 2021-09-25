@@ -20,3 +20,8 @@ https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation
 ```
 docker-compose up -d
 ```
+
+### Run tests
+```
+mvn test
+```

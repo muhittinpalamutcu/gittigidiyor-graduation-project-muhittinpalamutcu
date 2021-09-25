@@ -3,6 +3,7 @@ package io.github.muhittinpalamutcu.bankmanagementapp.service;
 import io.github.muhittinpalamutcu.bankmanagementapp.dto.CustomerDTO;
 import io.github.muhittinpalamutcu.bankmanagementapp.entity.Customer;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerAccountAlreadyInDesiredStatusException;
+import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerIsNotActiveException;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerNotFoundException;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.InputValidationException;
 import io.github.muhittinpalamutcu.bankmanagementapp.repository.CustomerRepository;
@@ -131,4 +132,66 @@ class CustomerServiceIntegrationTest {
         assertThrows(CustomerAccountAlreadyInDesiredStatusException.class, executable);
     }
 
+    @Test
+    void updateCustomerSalary() {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setIdentityNumber("25677685562");
+        customerDTO.setPhoneNumber("05231231254");
+        customerDTO.setFirstName("mui");
+        customerDTO.setLastName("coding");
+        customerDTO.setSalary(new BigDecimal("5000.00"));
+
+        Customer savedCustomer = customerService.saveCustomer(customerDTO);
+
+        // update customer salary
+        BigDecimal newSalary = new BigDecimal("6500.00");
+        customerService.updateCustomerSalary(savedCustomer.getId(), newSalary);
+
+        // find by id
+        Customer updatedCustomer = customerService.findById(savedCustomer.getId());
+
+        // check if new salary is updated
+        assertEquals(newSalary, updatedCustomer.getSalary());
+    }
+
+    @Test
+    void updateCustomerSalaryShouldThrowError() {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setIdentityNumber("25677685562");
+        customerDTO.setPhoneNumber("05231231254");
+        customerDTO.setFirstName("mui");
+        customerDTO.setLastName("coding");
+        customerDTO.setSalary(new BigDecimal("5000.00"));
+
+        Customer savedCustomer = customerService.saveCustomer(customerDTO);
+
+        // update customer salary
+        BigDecimal newSalary = new BigDecimal("-5");
+
+        Executable executable = () -> customerService.updateCustomerSalary(savedCustomer.getId(), newSalary);
+
+        assertThrows(InputValidationException.class, executable);
+    }
+
+    @Test
+    void updateDeactiveCustomerSalaryShouldThrowError() {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setIdentityNumber("25677685562");
+        customerDTO.setPhoneNumber("05231231254");
+        customerDTO.setFirstName("mui");
+        customerDTO.setLastName("coding");
+        customerDTO.setSalary(new BigDecimal("5000.00"));
+
+        Customer savedCustomer = customerService.saveCustomer(customerDTO);
+
+        // de-active customer
+        customerService.updateCustomerStatus(savedCustomer.getId(), false);
+
+        // update customer salary
+        BigDecimal newSalary = new BigDecimal("9800.00");
+
+        Executable executable = () -> customerService.updateCustomerSalary(savedCustomer.getId(), newSalary);
+
+        assertThrows(CustomerIsNotActiveException.class, executable);
+    }
 }

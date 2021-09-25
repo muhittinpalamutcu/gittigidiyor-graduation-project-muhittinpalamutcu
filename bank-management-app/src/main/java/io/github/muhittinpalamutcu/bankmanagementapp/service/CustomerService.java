@@ -3,6 +3,7 @@ package io.github.muhittinpalamutcu.bankmanagementapp.service;
 import io.github.muhittinpalamutcu.bankmanagementapp.dto.CustomerDTO;
 import io.github.muhittinpalamutcu.bankmanagementapp.entity.Customer;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerAccountAlreadyInDesiredStatusException;
+import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerIsNotActiveException;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerNotFoundException;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.InputValidationException;
 import io.github.muhittinpalamutcu.bankmanagementapp.repository.CustomerRepository;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -83,6 +85,33 @@ public class CustomerService {
             logger.info(operationResult);
             return updatedCustomer;
         }
+    }
+
+    public Customer updateCustomerSalary(long id, BigDecimal salary) {
+        if (salary.compareTo(BigDecimal.ZERO) < 0) {
+            final String errorMessage = "Salary can not be less than 0";
+            logger.error(errorMessage);
+            throw new InputValidationException(errorMessage);
+        }
+
+        Optional<Customer> maybeCustomer = customerRepository.findById(id);
+
+        if (maybeCustomer.isEmpty()) {
+            final String errorMessage = "Customer not found with id: " + id;
+            logger.error(errorMessage);
+            throw new CustomerNotFoundException(errorMessage);
+        }
+
+        Customer customer = maybeCustomer.get();
+
+        if (!customer.isActive()) {
+            final String errorMessage = "Can not update salary of de-active customer";
+            logger.error(errorMessage);
+            throw new CustomerIsNotActiveException(errorMessage);
+        }
+
+        customer.setSalary(salary);
+        return customerRepository.save(customer);
     }
 
     private void customerSaveInputValidations(CustomerDTO customerDTO) {

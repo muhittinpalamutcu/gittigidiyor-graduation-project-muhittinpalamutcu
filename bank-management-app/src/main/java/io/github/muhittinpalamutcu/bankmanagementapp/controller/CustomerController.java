@@ -5,6 +5,8 @@ import io.github.muhittinpalamutcu.bankmanagementapp.entity.Customer;
 import io.github.muhittinpalamutcu.bankmanagementapp.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
@@ -29,8 +31,13 @@ public class CustomerController {
         return customerService.findByIdentity(identity);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/status")
     public Customer updateCustomerStatus(@PathVariable long id, @RequestBody boolean isActive) {
         return customerService.updateCustomerStatus(id, isActive);
+    }
+
+    @PatchMapping("/{id}/salary")
+    public Customer updateCustomerSalary(@PathVariable long id, @RequestBody BigDecimal salary) {
+        return customerService.updateCustomerSalary(id, salary);
     }
 }
