@@ -20,6 +20,7 @@ https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation
 ![E-R Diagram](er-diagram/ER-Diagram.png "ER-Diagram")
 
 ### Start Database
+Database is running on Docker container and defined in docker-compose.yml file, which can be start up with following command;
 ```
 docker-compose up -d
 ```
@@ -41,3 +42,9 @@ Application will start on port 8080 by default.
 
 ### Swagger Page
 http://localhost:8080/swagger-ui.html
+
+### Containerization with Dockerfile
+```
+cd bank-management-app
+docker build --tag=bank-management-app:latest .
+```
