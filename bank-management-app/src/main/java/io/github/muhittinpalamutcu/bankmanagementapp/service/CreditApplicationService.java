@@ -5,6 +5,7 @@ import io.github.muhittinpalamutcu.bankmanagementapp.entity.CreditApplicationSta
 import io.github.muhittinpalamutcu.bankmanagementapp.entity.Customer;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerIsNotActiveException;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerNotFoundException;
+import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerOnGoingCreditApplicationException;
 import io.github.muhittinpalamutcu.bankmanagementapp.notification.SmsNotificationService;
 import io.github.muhittinpalamutcu.bankmanagementapp.repository.CreditApplicationRepository;
 import io.github.muhittinpalamutcu.bankmanagementapp.repository.CustomerRepository;
@@ -13,8 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CreditApplicationService {
@@ -52,6 +55,9 @@ public class CreditApplicationService {
         // validations
         Customer customer = creditApplicationCustomerValidations(customerIdentityNumber, maybeCustomer);
 
+        // check customer's past applications. do not allow multiple applications in 1 week
+        checkCustomerPastApplications(customerIdentityNumber);
+
         // check customer score and fill/update score table
         Integer customerCreditScore = creditScoreService.checkCustomerCreditScore(customer);
 
@@ -63,12 +69,24 @@ public class CreditApplicationService {
         creditApplication.setCustomer(customer);
         creditApplication.setStatus(creditResult.compareTo(BigDecimal.ZERO) == 0 ? CreditApplicationStatus.REJECTED : CreditApplicationStatus.APPROVED);
         creditApplication.setCreditLimit(creditResult);
+        creditApplication.setApplicationDate(LocalDateTime.now());
         CreditApplication savedCreditApplication = creditApplicationRepository.save(creditApplication);
 
         notifyCustomerAboutResult(creditApplication);
 
         logger.info("Credit application id {} finalized. Status: {}, Credit Limit: {}", savedCreditApplication.getId(), savedCreditApplication.getStatus(), savedCreditApplication.getCreditLimit());
         return savedCreditApplication;
+    }
+
+    private void checkCustomerPastApplications(String customerIdentityNumber) {
+        List<CreditApplication> creditApplications = creditApplicationRepository.findCreditApplicationsByCustomerIdentity(customerIdentityNumber);
+
+        boolean anyApplicationOnLast7Days = creditApplications.stream().anyMatch(c -> c.getApplicationDate().isAfter(LocalDateTime.now().minusDays(7)));
+        if (anyApplicationOnLast7Days) {
+            final String errorMessage = "Can not proceed, there is an another application on 7 days";
+            logger.error(errorMessage);
+            throw new CustomerOnGoingCreditApplicationException(errorMessage);
+        }
     }
 
     private void notifyCustomerAboutResult(CreditApplication creditApplication) {

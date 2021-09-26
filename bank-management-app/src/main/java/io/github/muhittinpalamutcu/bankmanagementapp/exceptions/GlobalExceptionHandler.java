@@ -39,6 +39,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({CustomerOnGoingCreditApplicationException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<BankManagementAppErrorResponse> handleException(CustomerOnGoingCreditApplicationException exception) {
+        BankManagementAppErrorResponse response = prepareErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     private BankManagementAppErrorResponse prepareErrorResponse(HttpStatus httpStatus, String message) {
         BankManagementAppErrorResponse response = new BankManagementAppErrorResponse();
         response.setStatus(httpStatus.value());

@@ -5,6 +5,7 @@ import io.github.muhittinpalamutcu.bankmanagementapp.entity.CreditApplicationSta
 import io.github.muhittinpalamutcu.bankmanagementapp.entity.Customer;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerIsNotActiveException;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerNotFoundException;
+import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerOnGoingCreditApplicationException;
 import io.github.muhittinpalamutcu.bankmanagementapp.repository.CreditApplicationRepository;
 import io.github.muhittinpalamutcu.bankmanagementapp.repository.CustomerRepository;
 import io.github.muhittinpalamutcu.bankmanagementapp.service.CreditApplicationService;
@@ -75,7 +76,7 @@ public class CreditApplicationServiceIntegrationTest {
 
         // apply for a credit with salary 6500
         CreditApplication creditApplication = creditApplicationService.newCreditApplication(customer.getIdentityNumber());
-
+        updateCreditApplicationDate(creditApplication);
         assertNotNull(creditApplication);
         assertEquals(creditApplication.getStatus(), CreditApplicationStatus.APPROVED);
         // Last digit of identity number 8 return credit score 900, which is less than 1000.
@@ -127,7 +128,9 @@ public class CreditApplicationServiceIntegrationTest {
 
         customerRepository.save(customerWithCreditApplication);
         CreditApplication creditApplication = creditApplicationService.newCreditApplication(customerWithCreditApplication.getIdentityNumber());
+        updateCreditApplicationDate(creditApplication);
         CreditApplication creditApplication2 = creditApplicationService.newCreditApplication(customerWithCreditApplication.getIdentityNumber());
+        updateCreditApplicationDate(creditApplication2);
         CreditApplication creditApplication3 = creditApplicationService.newCreditApplication(customerWithCreditApplication.getIdentityNumber());
 
         // result for customerWithCreditApplication
@@ -179,5 +182,30 @@ public class CreditApplicationServiceIntegrationTest {
 
         Executable executable = () -> creditApplicationService.newCreditApplication(savedCustomer.getIdentityNumber());
         assertThrows(CustomerIsNotActiveException.class, executable);
+    }
+
+    @Test
+    void customerOnGoingCreditApplicationException() {
+        Customer customer = new Customer();
+        customer.setIdentityNumber("12044599086");
+        customer.setFirstName("Muhittin");
+        customer.setLastName("Palamutcu");
+        customer.setPhoneNumber("05055552525");
+        customer.setSalary(new BigDecimal(6500));
+        customer.setActive(true);
+
+        customerRepository.save(customer);
+
+        creditApplicationService.newCreditApplication(customer.getIdentityNumber());
+
+        Executable executable = () -> creditApplicationService.newCreditApplication(customer.getIdentityNumber());
+        assertThrows(CustomerOnGoingCreditApplicationException.class, executable);
+    }
+
+    // Since only one application allowed in one week, sometimes need to test multiple applications.
+    // This method is to update credit application date in order to complete test.
+    private void updateCreditApplicationDate(CreditApplication creditApplication) {
+        creditApplication.setApplicationDate(creditApplication.getApplicationDate().minusMonths(1));
+        creditApplicationRepository.save(creditApplication);
     }
 }
