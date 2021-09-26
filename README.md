@@ -16,6 +16,9 @@ https://github.com/113-GittiGidiyor-Java-Spring-Bootcamp/gittigidiyor-graduation
 - Docker
 - Maven
 
+## ER Diagram
+![E-R Diagram](er-diagram/ER-Diagram.png "ER-Diagram")
+
 ### Start Database
 ```
 docker-compose up -d
