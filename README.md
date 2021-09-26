@@ -23,5 +23,18 @@ docker-compose up -d
 
 ### Run tests
 ```
+cd bank-management-app
 mvn test
 ```
+
+### Start application
+Firstly, make sure database is started.
+Then;
+```
+cd bank-management-app
+mvn spring-boot:run
+```
+Application will start on port 8080 by default.
+
+### Swagger Page
+http://localhost:8080/swagger-ui.html
