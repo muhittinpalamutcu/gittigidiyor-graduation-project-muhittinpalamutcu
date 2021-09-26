@@ -5,6 +5,7 @@ import io.github.muhittinpalamutcu.bankmanagementapp.entity.CreditApplicationSta
 import io.github.muhittinpalamutcu.bankmanagementapp.entity.Customer;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerIsNotActiveException;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerNotFoundException;
+import io.github.muhittinpalamutcu.bankmanagementapp.notification.SmsNotificationService;
 import io.github.muhittinpalamutcu.bankmanagementapp.repository.CreditApplicationRepository;
 import io.github.muhittinpalamutcu.bankmanagementapp.repository.CustomerRepository;
 import org.slf4j.Logger;
@@ -23,11 +24,13 @@ public class CreditApplicationService {
     private final CreditApplicationRepository creditApplicationRepository;
     private final CustomerRepository customerRepository;
     private final CreditScoreService creditScoreService;
+    private final SmsNotificationService smsNotificationService;
 
-    public CreditApplicationService(CreditApplicationRepository creditApplicationRepository, CustomerRepository customerRepository, CreditScoreService creditScoreService) {
+    public CreditApplicationService(CreditApplicationRepository creditApplicationRepository, CustomerRepository customerRepository, CreditScoreService creditScoreService, SmsNotificationService smsNotificationService) {
         this.creditApplicationRepository = creditApplicationRepository;
         this.customerRepository = customerRepository;
         this.creditScoreService = creditScoreService;
+        this.smsNotificationService = smsNotificationService;
     }
 
     public List<CreditApplication> getCreditApplicationsByCustomerIdentity(String customerIdentityNumber) {
@@ -62,9 +65,26 @@ public class CreditApplicationService {
         creditApplication.setCreditLimit(creditResult);
         CreditApplication savedCreditApplication = creditApplicationRepository.save(creditApplication);
 
-        logger.info("Credit application id {} finalized. Status: {}, Credit Limit: {}", savedCreditApplication.getId(), savedCreditApplication.getStatus(), savedCreditApplication.getCreditLimit());
+        notifyCustomerAboutResult(creditApplication);
 
+        logger.info("Credit application id {} finalized. Status: {}, Credit Limit: {}", savedCreditApplication.getId(), savedCreditApplication.getStatus(), savedCreditApplication.getCreditLimit());
         return savedCreditApplication;
+    }
+
+    private void notifyCustomerAboutResult(CreditApplication creditApplication) {
+        Customer customer = creditApplication.getCustomer();
+        StringBuilder notifyMessage = new StringBuilder();
+        notifyMessage.append("Dear ").append(customer.getFullName()).append(", ");
+        notifyMessage.append("your credit application has been ");
+        notifyMessage.append(creditApplication.getStatus().getStatus()).append(". ");
+        if (CreditApplicationStatus.APPROVED.equals(creditApplication.getStatus())) {
+            notifyMessage.append("Your credit limit: ");
+            notifyMessage.append(creditApplication.getCreditLimit());
+            notifyMessage.append(". ");
+        }
+        notifyMessage.append("Thank you for your application.");
+
+        smsNotificationService.notifyCustomer(customer, notifyMessage.toString());
     }
 
     private Customer creditApplicationCustomerValidations(String customerIdentityNumber, Optional<Customer> maybeCustomer) {

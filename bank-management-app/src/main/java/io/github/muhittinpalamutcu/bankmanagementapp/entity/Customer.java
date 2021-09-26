@@ -39,4 +39,8 @@ public class Customer {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
     @ToString.Exclude
     private CreditScore creditScore;
+
+    public String getFullName() {
+        return getFirstName() + " " + getLastName();
+    }
 }
