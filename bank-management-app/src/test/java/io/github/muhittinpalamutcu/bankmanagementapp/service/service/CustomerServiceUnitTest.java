@@ -1,8 +1,9 @@
-package io.github.muhittinpalamutcu.bankmanagementapp.service;
+package io.github.muhittinpalamutcu.bankmanagementapp.service.service;
 
 import io.github.muhittinpalamutcu.bankmanagementapp.dto.CustomerDTO;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.InputValidationException;
 import io.github.muhittinpalamutcu.bankmanagementapp.repository.CustomerRepository;
+import io.github.muhittinpalamutcu.bankmanagementapp.service.CustomerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;

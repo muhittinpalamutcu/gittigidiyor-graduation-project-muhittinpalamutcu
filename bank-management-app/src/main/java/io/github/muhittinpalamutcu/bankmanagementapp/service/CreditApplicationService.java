@@ -46,6 +46,7 @@ public class CreditApplicationService {
         logger.info("New credit application received for customer with identity number: {}", customerIdentityNumber);
         Optional<Customer> maybeCustomer = customerRepository.findByIdentityNumber(customerIdentityNumber);
 
+        // validations
         Customer customer = creditApplicationCustomerValidations(customerIdentityNumber, maybeCustomer);
 
         // check customer score and fill/update score table

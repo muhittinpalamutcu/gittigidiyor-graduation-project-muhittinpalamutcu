@@ -1,4 +1,4 @@
-package io.github.muhittinpalamutcu.bankmanagementapp.service;
+package io.github.muhittinpalamutcu.bankmanagementapp.service.service;
 
 import io.github.muhittinpalamutcu.bankmanagementapp.dto.CustomerDTO;
 import io.github.muhittinpalamutcu.bankmanagementapp.entity.Customer;
@@ -7,6 +7,7 @@ import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerIsNotAct
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.CustomerNotFoundException;
 import io.github.muhittinpalamutcu.bankmanagementapp.exceptions.InputValidationException;
 import io.github.muhittinpalamutcu.bankmanagementapp.repository.CustomerRepository;
+import io.github.muhittinpalamutcu.bankmanagementapp.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -64,6 +65,27 @@ class CustomerServiceIntegrationTest {
         // save with same identity number again should throw error
         Executable executable = () -> customerService.saveCustomer(customerDTO);
         assertThrows(InputValidationException.class, executable);
+    }
+
+    @Test
+    void findById() {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setIdentityNumber("25677685562");
+        customerDTO.setPhoneNumber("05231231254");
+        customerDTO.setFirstName("Muhittin");
+        customerDTO.setLastName("Palamutcu");
+        customerDTO.setSalary(new BigDecimal(2500));
+
+        Customer savedCustomer = customerService.saveCustomer(customerDTO);
+
+        // find with correct identity number
+        Customer foundCustomer = customerService.findById(savedCustomer.getId());
+        assertNotNull(foundCustomer);
+        assertEquals(foundCustomer.getId(), savedCustomer.getId());
+
+        // throw if wrong id
+        Executable executable = () -> customerService.findById(-5);
+        assertThrows(CustomerNotFoundException.class, executable);
     }
 
     @Test

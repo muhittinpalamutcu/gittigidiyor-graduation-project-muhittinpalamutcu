@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -29,12 +31,12 @@ public class Customer {
     private boolean isActive;
 
     @JsonManagedReference
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<CreditApplication> creditApplications;
 
     @JsonManagedReference
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "customer")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
     @ToString.Exclude
     private CreditScore creditScore;
 }
