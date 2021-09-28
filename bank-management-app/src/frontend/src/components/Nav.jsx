@@ -95,7 +95,7 @@ const Nav = () => {
               </li>
               <li className="py-1">
                 <Link
-                  to="/"
+                  to="/customer-search"
                   className="flex px-4 justify-end border-r-4 border-white"
                 >
                   <span>Search Customer</span>

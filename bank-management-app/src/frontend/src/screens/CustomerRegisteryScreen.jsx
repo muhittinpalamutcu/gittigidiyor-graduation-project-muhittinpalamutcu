@@ -21,8 +21,6 @@ const CustomerRegisteryScreen = ({ history }) => {
   const customerRegister = useSelector((state) => state.customerRegister);
   const { loading, error, customerInfo } = customerRegister;
 
-  console.log(error);
-
   useEffect(() => {
     if (customerInfo) {
       if (customerInfo.identityNumber) {
@@ -67,7 +65,7 @@ const CustomerRegisteryScreen = ({ history }) => {
             </Message>
           )}
           <div className="grid grid-cols-2 gap-4">
-            <div className="">
+            <div>
               <p className="text-sm font-bold mb-1 text-gray-700">FIRST NAME</p>
               <input
                 type="text"
@@ -77,7 +75,7 @@ const CustomerRegisteryScreen = ({ history }) => {
                 className="input"
               />
             </div>
-            <div className="">
+            <div>
               <p className="text-sm font-bold mb-1 text-gray-700">LAST NAME</p>
               <input
                 type="text"
@@ -138,11 +136,14 @@ const CustomerRegisteryScreen = ({ history }) => {
               <h3 className=" text-green-900 font-bold text-base">
                 Customer Information
               </h3>
-
+              <p>Id : {customerInfo.id}</p>
               <p>Full Name : {customerInfo.fullName}</p>
               <p>Identity Number : {customerInfo.identityNumber}</p>
               <p>Phone Number : {customerInfo.phoneNumber}</p>
               <p>Salary : {customerInfo.salary} TL</p>
+              <p className="text-blue-600 font-bold">
+                {customerInfo.active ? "Account active" : "Account deactivated"}
+              </p>
               <div className="flex justify-end w-full">
                 <p
                   className="font-semibold text-gray-400 hover:text-gray-700 cursor-pointer"

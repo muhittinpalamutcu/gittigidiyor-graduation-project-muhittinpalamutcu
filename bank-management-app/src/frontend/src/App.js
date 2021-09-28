@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import Nav from "./components/Nav";
 import CreditApplication from "./screens/CreditApplication";
 import CustomerRegisteryScreen from "./screens/CustomerRegisteryScreen";
+import CustomerSearchScreen from "./screens/CustomerSearchScreen";
 
 const App = () => {
   const [newRegistery, setNewRegistery] = useState(false);
@@ -47,6 +48,7 @@ const App = () => {
               path="/customer-registery"
               component={CustomerRegisteryScreen}
             />
+            <Route path="/customer-search" component={CustomerSearchScreen} />
             <Route path="/credit-application" component={CreditApplication} />
           </main>
           <div className="text-center mt-10 font-light text-xs">

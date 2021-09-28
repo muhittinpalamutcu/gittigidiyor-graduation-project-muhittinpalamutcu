@@ -3,6 +3,12 @@ import {
   CUSTOMER_REGISTER_REQUEST,
   CUSTOMER_REGISTER_SUCCESS,
   CUSTOMER_REMOVE_FROM_STORAGE,
+  CUSTOMER_SEARCH_BY_IDENTITY_FAIL,
+  CUSTOMER_SEARCH_BY_IDENTITY_REQUEST,
+  CUSTOMER_SEARCH_BY_IDENTITY_SUCCESS,
+  CUSTOMER_SEARCH_BY_ID_FAIL,
+  CUSTOMER_SEARCH_BY_ID_REQUEST,
+  CUSTOMER_SEARCH_BY_ID_SUCCESS,
 } from "../constants/customerConstants";
 import axios from "axios";
 
@@ -48,4 +54,66 @@ export const removeExistedCustomerFromStorage = () => (dispatch) => {
   dispatch({
     type: CUSTOMER_REMOVE_FROM_STORAGE,
   });
+};
+
+export const searchCustomerByIdentity =
+  (identityNumber) => async (dispatch) => {
+    try {
+      dispatch({
+        type: CUSTOMER_SEARCH_BY_IDENTITY_REQUEST,
+      });
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.get(
+        `/api/customers?identity=${identityNumber}`,
+        config
+      );
+
+      dispatch({
+        type: CUSTOMER_SEARCH_BY_IDENTITY_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: CUSTOMER_SEARCH_BY_IDENTITY_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+export const searchCustomerById = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: CUSTOMER_SEARCH_BY_ID_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(`/api/customers/${id}`, config);
+
+    dispatch({
+      type: CUSTOMER_SEARCH_BY_ID_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: CUSTOMER_SEARCH_BY_ID_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
 };
