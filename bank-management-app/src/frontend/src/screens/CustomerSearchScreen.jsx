@@ -17,6 +17,13 @@ const CustomerSearchScreen = () => {
 
   const dispatch = useDispatch();
 
+  const customerSearchById = useSelector((state) => state.customerSearchById);
+  const {
+    loading: loadingById,
+    error: errorById,
+    customerInfoById,
+  } = customerSearchById;
+
   const customerSearchByIdentity = useSelector(
     (state) => state.customerSearchByIdentity
   );
@@ -26,19 +33,10 @@ const CustomerSearchScreen = () => {
     customerInfoByIdentity,
   } = customerSearchByIdentity;
 
-  const customerSearchById = useSelector((state) => state.customerSearchById);
-  const {
-    loading: loadingById,
-    error: errorById,
-    customerInfoById,
-  } = customerSearchById;
-
   useEffect(() => {
-    if (customerInfoByIdentity) {
-      if (customerInfoByIdentity.identityNumber) {
-      }
-    }
-  }, [customerInfoByIdentity]);
+    dispatch({ type: CUSTOMER_SEARCH_BY_ID_RESET });
+    dispatch({ type: CUSTOMER_SEARCH_BY_IDENTITY_RESET });
+  }, [dispatch]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -115,7 +113,7 @@ const CustomerSearchScreen = () => {
         {customerInfoById && (
           <div className="p-5">
             <div className="shadow-md bg-gray-200 p-3">
-              <h3 className=" text-green-900 font-bold text-base">
+              <h3 className=" text-gray-900 font-bold text-base">
                 Customer Information
               </h3>
               <p>Id : {customerInfoById.id}</p>

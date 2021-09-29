@@ -5,12 +5,16 @@ import {
   customerRegisterReducer,
   customerSearchByIdentityReducer,
   customerSearchByIdReducer,
+  customerUpdateSalaryReducer,
+  customerUpdateStatusReducer,
 } from "./reducers/customerReducers";
 
 const reducer = combineReducers({
   customerRegister: customerRegisterReducer,
   customerSearchByIdentity: customerSearchByIdentityReducer,
   customerSearchById: customerSearchByIdReducer,
+  customerUpdateSalary: customerUpdateSalaryReducer,
+  customerUpdateStatus: customerUpdateStatusReducer,
 });
 
 const customerInfoFromStorage = localStorage.getItem("customerInfo")

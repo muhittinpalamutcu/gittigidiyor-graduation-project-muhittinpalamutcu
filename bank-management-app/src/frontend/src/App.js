@@ -5,6 +5,7 @@ import Nav from "./components/Nav";
 import CreditApplication from "./screens/CreditApplication";
 import CustomerRegisteryScreen from "./screens/CustomerRegisteryScreen";
 import CustomerSearchScreen from "./screens/CustomerSearchScreen";
+import CustomerUpdateScreen from "./screens/CustomerUpdateScreen";
 
 const App = () => {
   const [newRegistery, setNewRegistery] = useState(false);
@@ -49,6 +50,7 @@ const App = () => {
               component={CustomerRegisteryScreen}
             />
             <Route path="/customer-search" component={CustomerSearchScreen} />
+            <Route path="/customer-update" component={CustomerUpdateScreen} />
             <Route path="/credit-application" component={CreditApplication} />
           </main>
           <div className="text-center mt-10 font-light text-xs">

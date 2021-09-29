@@ -133,7 +133,7 @@ const CustomerRegisteryScreen = ({ history }) => {
         {customerInfo && !newRegistery && (
           <div className="p-5">
             <div className="shadow-md bg-gray-200 p-3">
-              <h3 className=" text-green-900 font-bold text-base">
+              <h3 className=" text-gray-900 font-bold text-base">
                 Customer Information
               </h3>
               <p>Id : {customerInfo.id}</p>
