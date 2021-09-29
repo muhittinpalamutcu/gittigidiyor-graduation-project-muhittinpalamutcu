@@ -47,5 +47,16 @@ public class CustomerServiceUnitTest {
 
         Executable executable2 = () -> customerService.saveCustomer(customerDTOWithWrongIdentityNumber);
         assertThrows(InputValidationException.class, executable2);
+
+        // customerDTOWithWrongSalary
+        CustomerDTO customerDTOWithWrongSalary = new CustomerDTO();
+        customerDTOWithWrongSalary.setIdentityNumber("164259124290");
+        customerDTOWithWrongSalary.setPhoneNumber("05555555555");
+        customerDTOWithWrongSalary.setFirstName("John");
+        customerDTOWithWrongSalary.setLastName("Doe");
+        customerDTOWithWrongSalary.setSalary(new BigDecimal(-10));
+
+        Executable executable3 = () -> customerService.saveCustomer(customerDTOWithWrongSalary);
+        assertThrows(InputValidationException.class, executable3);
     }
 }

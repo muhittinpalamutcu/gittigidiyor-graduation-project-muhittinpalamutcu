@@ -130,5 +130,11 @@ public class CustomerService {
             logger.error(errorMessage);
             throw new InputValidationException(errorMessage);
         }
+
+        if (customerDTO.getSalary().compareTo(BigDecimal.ZERO) < 0) {
+            final String errorMessage = "Salary can't be less than 0";
+            logger.error(errorMessage);
+            throw new InputValidationException(errorMessage);
+        }
     }
 }
