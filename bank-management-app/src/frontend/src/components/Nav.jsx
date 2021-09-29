@@ -1,11 +1,37 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const Nav = () => {
+  const [pathname, setPathname] = useState("");
   const [showNav, setShownav] = useState(false);
   const [miniMapCustomer, setMiniMapCustomer] = useState(false);
   const [miniMapCreditApplication, setMiniMapCreditApplication] =
     useState(false);
+
+  let location = useLocation();
+
+  useEffect(() => {
+    const { pathname } = location;
+    setPathname(pathname);
+    if (
+      pathname === "/customer-registery" ||
+      pathname === "/customer-search" ||
+      pathname === "/customer-update"
+    ) {
+      setMiniMapCustomer(true);
+      setMiniMapCreditApplication(false);
+    } else if (
+      pathname === "/credit-information-inquiry" ||
+      pathname === "/credit-application"
+    ) {
+      setMiniMapCustomer(false);
+      setMiniMapCreditApplication(true);
+    } else {
+      setMiniMapCustomer(false);
+      setMiniMapCreditApplication(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   const btnClick = () => {
     showNav ? setShownav(false) : setShownav(true);
@@ -84,8 +110,14 @@ const Nav = () => {
             </svg>
           </div>
           {miniMapCustomer && (
-            <ul className="text-xs border-primary border-r-4">
-              <li className="py-1 ">
+            <ul className="text-xs font-normal">
+              <li
+                className={`py-1 ${
+                  pathname === "/customer-registery"
+                    ? "border-primary border-r-4"
+                    : "border-white"
+                }`}
+              >
                 <Link
                   to="/customer-registery"
                   className="flex px-4 justify-end border-r-4 border-white"
@@ -93,7 +125,13 @@ const Nav = () => {
                   <span>Customer Registery</span>
                 </Link>
               </li>
-              <li className="py-1">
+              <li
+                className={`py-1 ${
+                  pathname === "/customer-search"
+                    ? "border-primary border-r-4"
+                    : "border-white"
+                }`}
+              >
                 <Link
                   to="/customer-search"
                   className="flex px-4 justify-end border-r-4 border-white"
@@ -101,7 +139,13 @@ const Nav = () => {
                   <span>Search Customer</span>
                 </Link>
               </li>
-              <li className="py-1">
+              <li
+                className={`py-1 ${
+                  pathname === "/customer-update"
+                    ? "border-primary border-r-4"
+                    : "border-white"
+                }`}
+              >
                 <Link
                   to="/customer-update"
                   className="flex px-4 justify-end border-r-4 border-white"
@@ -113,7 +157,7 @@ const Nav = () => {
           )}
         </li>
 
-        <li className="py-1">
+        <li className="py-1 font-bold">
           <div
             className="flex px-4 justify-end border-r-4 border-white cursor-pointer"
             onClick={miniMapCreditApplicationHandler}
@@ -136,8 +180,14 @@ const Nav = () => {
           </div>
         </li>
         {miniMapCreditApplication && (
-          <ul className="text-xs border-primary border-r-4">
-            <li className="py-1 ">
+          <ul className="text-xs font-normal">
+            <li
+              className={`py-1 ${
+                pathname === "/credit-information-inquiry"
+                  ? "border-primary border-r-4"
+                  : "border-white"
+              }`}
+            >
               <Link
                 to="/credit-information-inquiry"
                 className="flex px-4 justify-end border-r-4 border-white"
@@ -145,9 +195,15 @@ const Nav = () => {
                 <span>Credit Information Inquiry</span>
               </Link>
             </li>
-            <li className="py-1">
+            <li
+              className={`py-1 ${
+                pathname === "/credit-application"
+                  ? "border-primary border-r-4"
+                  : "border-white"
+              }`}
+            >
               <Link
-                to="/"
+                to="/credit-application"
                 className="flex px-4 justify-end border-r-4 border-white"
               >
                 <span>Credit Application</span>

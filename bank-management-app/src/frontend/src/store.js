@@ -8,7 +8,10 @@ import {
   customerUpdateSalaryReducer,
   customerUpdateStatusReducer,
 } from "./reducers/customerReducers";
-import { creditInformationInquiryReducer } from "./reducers/creditReducers";
+import {
+  creditInformationInquiryReducer,
+  creditApplicationReducer,
+} from "./reducers/creditReducers";
 
 const reducer = combineReducers({
   customerRegister: customerRegisterReducer,
@@ -17,6 +20,7 @@ const reducer = combineReducers({
   customerUpdateSalary: customerUpdateSalaryReducer,
   customerUpdateStatus: customerUpdateStatusReducer,
   creditInformationInquiry: creditInformationInquiryReducer,
+  creditApplication: creditApplicationReducer,
 });
 
 const customerInfoFromStorage = localStorage.getItem("customerInfo")

@@ -6,6 +6,7 @@ import CustomerRegisteryScreen from "./screens/CustomerRegisteryScreen";
 import CustomerSearchScreen from "./screens/CustomerSearchScreen";
 import CustomerUpdateScreen from "./screens/CustomerUpdateScreen";
 import CreditInformationInquiryScreen from "./screens/CreditInformationInquiryScreen";
+import CreditApplicationScreen from "./screens/CreditApplicationScreen";
 
 const App = () => {
   const [newRegistery, setNewRegistery] = useState(false);
@@ -55,9 +56,13 @@ const App = () => {
               path="/credit-information-inquiry"
               component={CreditInformationInquiryScreen}
             />
+            <Route
+              path="/credit-application"
+              component={CreditApplicationScreen}
+            />
           </main>
           <div className="text-center mt-10 font-light text-xs">
-            © Copyright 2021 @mui.coding-"Muhittin Palamutçu"
+            © Copyright 2021 Muhittin Palamutçu
           </div>
         </div>
       </div>
