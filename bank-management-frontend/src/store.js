@@ -23,13 +23,7 @@ const reducer = combineReducers({
   creditApplication: creditApplicationReducer,
 });
 
-const customerInfoFromStorage = localStorage.getItem("customerInfo")
-  ? JSON.parse(localStorage.getItem("customerInfo"))
-  : null;
-
-const initialState = {
-  customerRegister: { customerInfo: customerInfoFromStorage },
-};
+const initialState = {};
 
 const middleware = [thunk];
 

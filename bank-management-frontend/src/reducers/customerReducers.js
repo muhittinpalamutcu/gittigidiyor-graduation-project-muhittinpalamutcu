@@ -2,7 +2,7 @@ import {
   CUSTOMER_REGISTER_REQUEST,
   CUSTOMER_REGISTER_SUCCESS,
   CUSTOMER_REGISTER_FAIL,
-  CUSTOMER_REGISTERY_RESET,
+  CUSTOMER_REGISTER_RESET,
   CUSTOMER_SEARCH_BY_IDENTITY_REQUEST,
   CUSTOMER_SEARCH_BY_IDENTITY_SUCCESS,
   CUSTOMER_SEARCH_BY_IDENTITY_FAIL,
@@ -29,10 +29,8 @@ export const customerRegisterReducer = (state = {}, action) => {
       return { loading: false, customerInfo: action.payload };
     case CUSTOMER_REGISTER_FAIL:
       return { loading: false, error: action.payload };
-    case CUSTOMER_REGISTERY_RESET:
-      return {
-        customerInfo: {},
-      };
+    case CUSTOMER_REGISTER_RESET:
+      return {};
     default:
       return state;
   }

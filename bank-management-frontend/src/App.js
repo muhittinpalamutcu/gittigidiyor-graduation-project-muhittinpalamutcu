@@ -42,7 +42,7 @@ const App = () => {
                 to="/customer-registery"
                 className="btn text-primary border-primary md:border-2 hover:bg-primary hover:text-white transition ease-out duration-500"
               >
-                Registery
+                New Customer Registration
               </Link>
             )}
           </div>

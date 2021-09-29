@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  register,
-  removeExistedCustomerFromStorage,
-} from "../actions/customerActions";
+import { register } from "../actions/customerActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import { CUSTOMER_REGISTERY_RESET } from "../constants/customerConstants";
+import { CUSTOMER_REGISTER_RESET } from "../constants/customerConstants";
 
-const CustomerRegisteryScreen = ({ history }) => {
+const CustomerRegisteryScreen = () => {
   const [identityNumber, setIdentityNumber] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -22,12 +19,8 @@ const CustomerRegisteryScreen = ({ history }) => {
   const { loading, error, customerInfo } = customerRegister;
 
   useEffect(() => {
-    if (customerInfo) {
-      if (customerInfo.identityNumber) {
-        setNewRegistery(false);
-      }
-    }
-  }, [history, customerInfo]);
+    dispatch({ type: CUSTOMER_REGISTER_RESET });
+  }, [dispatch]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -42,9 +35,8 @@ const CustomerRegisteryScreen = ({ history }) => {
     setLastName("");
     setPhoneNumber("");
     setSalary("");
-    dispatch(removeExistedCustomerFromStorage());
-    dispatch({ type: CUSTOMER_REGISTERY_RESET });
     setNewRegistery(true);
+    dispatch({ type: CUSTOMER_REGISTER_RESET });
   };
 
   return (
@@ -112,7 +104,7 @@ const CustomerRegisteryScreen = ({ history }) => {
             <div className="col-span-2">
               <p className="text-sm font-bold mb-1 text-gray-700">SALARY</p>
               <input
-                type="text"
+                type="number"
                 value={salary}
                 onChange={(e) => setSalary(e.target.value)}
                 placeholder="10000"

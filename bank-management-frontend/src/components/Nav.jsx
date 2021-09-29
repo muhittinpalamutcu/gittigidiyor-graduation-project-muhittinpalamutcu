@@ -1,48 +1,21 @@
+import { findByLabelText } from "@testing-library/dom";
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const Nav = () => {
   const [pathname, setPathname] = useState("");
   const [showNav, setShownav] = useState(false);
-  const [miniMapCustomer, setMiniMapCustomer] = useState(false);
-  const [miniMapCreditApplication, setMiniMapCreditApplication] =
-    useState(false);
 
   let location = useLocation();
 
   useEffect(() => {
     const { pathname } = location;
     setPathname(pathname);
-    if (
-      pathname === "/customer-registery" ||
-      pathname === "/customer-search" ||
-      pathname === "/customer-update"
-    ) {
-      setMiniMapCustomer(true);
-      setMiniMapCreditApplication(false);
-    } else if (
-      pathname === "/credit-information-inquiry" ||
-      pathname === "/credit-application"
-    ) {
-      setMiniMapCustomer(false);
-      setMiniMapCreditApplication(true);
-    } else {
-      setMiniMapCustomer(false);
-      setMiniMapCreditApplication(false);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   const btnClick = () => {
     showNav ? setShownav(false) : setShownav(true);
-  };
-
-  const miniMapCustomerHandler = () => {
-    setMiniMapCustomer(miniMapCustomer ? false : true);
-  };
-
-  const miniMapCreditApplicationHandler = () => {
-    setMiniMapCreditApplication(miniMapCreditApplication ? false : true);
   };
 
   return (
@@ -88,10 +61,7 @@ const Nav = () => {
         </div>
       </div>
       <ul className={`text-sm mt-6 ${showNav ? "" : "hidden"} md:block`}>
-        <li
-          className="text-gray-700 font-bold py-1 cursor-pointer"
-          onClick={miniMapCustomerHandler}
-        >
+        <li className="text-gray-700 font-bold py-1 cursor-pointer">
           <div className="flex px-4 justify-end border-r-4 border-white hover:text-gray-900">
             <span>Customer</span>
             <svg
@@ -109,59 +79,54 @@ const Nav = () => {
               />
             </svg>
           </div>
-          {miniMapCustomer && (
-            <ul className="text-xs font-normal">
-              <li
-                className={`py-1 hover:text-gray-900 ${
-                  pathname === "/customer-registery"
-                    ? "border-primary border-r-4"
-                    : "border-white"
-                }`}
-              >
-                <Link
-                  to="/customer-registery"
-                  className="flex px-4 justify-end border-r-4 border-white"
-                >
-                  <span>Customer Registery</span>
-                </Link>
-              </li>
-              <li
-                className={`py-1 hover:text-gray-900 ${
-                  pathname === "/customer-search"
-                    ? "border-primary border-r-4"
-                    : "border-white"
-                }`}
-              >
-                <Link
-                  to="/customer-search"
-                  className="flex px-4 justify-end border-r-4 border-white"
-                >
-                  <span>Search Customer</span>
-                </Link>
-              </li>
-              <li
-                className={`py-1 hover:text-gray-900 ${
-                  pathname === "/customer-update"
-                    ? "border-primary border-r-4"
-                    : "border-white"
-                }`}
-              >
-                <Link
-                  to="/customer-update"
-                  className="flex px-4 justify-end border-r-4 border-white"
-                >
-                  <span>Update Customer</span>
-                </Link>
-              </li>
-            </ul>
-          )}
-        </li>
 
+          <ul className="text-xs font-normal">
+            <li
+              className={`py-1 hover:text-gray-900 ${
+                pathname === "/customer-registery"
+                  ? "border-primary border-r-4"
+                  : "border-white"
+              }`}
+            >
+              <Link
+                to="/customer-registery"
+                className="flex px-4 justify-end border-r-4 border-white"
+              >
+                <span>Customer Registery</span>
+              </Link>
+            </li>
+            <li
+              className={`py-1 hover:text-gray-900 ${
+                pathname === "/customer-search"
+                  ? "border-primary border-r-4"
+                  : "border-white"
+              }`}
+            >
+              <Link
+                to="/customer-search"
+                className="flex px-4 justify-end border-r-4 border-white"
+              >
+                <span>Search Customer</span>
+              </Link>
+            </li>
+            <li
+              className={`py-1 hover:text-gray-900 ${
+                pathname === "/customer-update"
+                  ? "border-primary border-r-4"
+                  : "border-white"
+              }`}
+            >
+              <Link
+                to="/customer-update"
+                className="flex px-4 justify-end border-r-4 border-white"
+              >
+                <span>Update Customer</span>
+              </Link>
+            </li>
+          </ul>
+        </li>
         <li className="py-1 font-bold hover:text-gray-900">
-          <div
-            className="flex px-4 justify-end border-r-4 border-white cursor-pointer"
-            onClick={miniMapCreditApplicationHandler}
-          >
+          <div className="flex px-4 justify-end border-r-4 border-white cursor-pointer">
             <span>Credit</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -179,38 +144,37 @@ const Nav = () => {
             </svg>
           </div>
         </li>
-        {miniMapCreditApplication && (
-          <ul className="text-xs font-normal">
-            <li
-              className={`py-1 hover:text-gray-900 ${
-                pathname === "/credit-information-inquiry"
-                  ? "border-primary border-r-4"
-                  : "border-white"
-              }`}
+
+        <ul className="text-xs font-normal">
+          <li
+            className={`py-1 hover:text-gray-900 ${
+              pathname === "/credit-information-inquiry"
+                ? "border-primary border-r-4"
+                : "border-white"
+            }`}
+          >
+            <Link
+              to="/credit-information-inquiry"
+              className="flex px-4 justify-end border-r-4 border-white"
             >
-              <Link
-                to="/credit-information-inquiry"
-                className="flex px-4 justify-end border-r-4 border-white"
-              >
-                <span>Credit Information Inquiry</span>
-              </Link>
-            </li>
-            <li
-              className={`py-1 hover:text-gray-900 ${
-                pathname === "/credit-application"
-                  ? "border-primary border-r-4"
-                  : "border-white"
-              }`}
+              <span>Credit Information Inquiry</span>
+            </Link>
+          </li>
+          <li
+            className={`py-1 hover:text-gray-900 ${
+              pathname === "/credit-application"
+                ? "border-primary border-r-4"
+                : "border-white"
+            }`}
+          >
+            <Link
+              to="/credit-application"
+              className="flex px-4 justify-end border-r-4 border-white"
             >
-              <Link
-                to="/credit-application"
-                className="flex px-4 justify-end border-r-4 border-white"
-              >
-                <span>Credit Application</span>
-              </Link>
-            </li>
-          </ul>
-        )}
+              <span>Credit Application</span>
+            </Link>
+          </li>
+        </ul>
       </ul>
     </nav>
   );

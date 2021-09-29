@@ -57,16 +57,6 @@ const CustomerSearchScreen = () => {
     <div>
       <div className="flex justify-start items-center gap-3">
         <h1 className="text-gray-900 font-bold text-xl">Search Customer By </h1>
-        <div class="relative">
-          <select
-            onChange={(event) => changeOption(event.target.value)}
-            value={currentOption}
-            className="w-30 h-6 shadow-lg rounded-md border-2 bg-primary text-white hover:border-gray-700 border-transparent focus:bg-primary focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
-          >
-            <option value="id">Id</option>
-            <option value="identityNumber">Identity Number</option>
-          </select>
-        </div>
       </div>
 
       <hr className="border-primary border-b-2 mt-2" />
@@ -86,11 +76,24 @@ const CustomerSearchScreen = () => {
           )}
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <p className="text-sm font-bold mb-1 text-gray-700 uppercase">
-                {currentOption === "id"
-                  ? "Please enter customer id to search"
-                  : "Please enter customer identity number to search"}
-              </p>
+              <div className="flex justify-between items-end mb-4">
+                <p className="text-sm font-bold mb-1 text-gray-700 uppercase">
+                  {currentOption === "id"
+                    ? "Please enter customer id to search"
+                    : "Please enter customer identity number to search"}
+                </p>
+                <div class="relative">
+                  <select
+                    onChange={(event) => changeOption(event.target.value)}
+                    value={currentOption}
+                    className="w-30 h-6 shadow-lg rounded-md border-2 bg-primary text-white hover:border-gray-700 border-transparent focus:bg-primary focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                  >
+                    <option value="id">Id</option>
+                    <option value="identityNumber">Identity Number</option>
+                  </select>
+                </div>
+              </div>
+
               <input
                 type="text"
                 value={IdOridentityNumber}
@@ -123,8 +126,8 @@ const CustomerSearchScreen = () => {
               <p>Salary : {customerInfoById.salary} TL</p>
               <p className="text-blue-600 font-bold">
                 {customerInfoById.active
-                  ? "Account active"
-                  : "Account deactivated"}
+                  ? "Account is active"
+                  : "Account is deactivate"}
               </p>
             </div>
           </div>
@@ -142,8 +145,8 @@ const CustomerSearchScreen = () => {
               <p>Salary : {customerInfoByIdentity.salary} TL</p>
               <p className="text-blue-600 font-bold">
                 {customerInfoByIdentity.active
-                  ? "Account active"
-                  : "Account deactivated"}
+                  ? "Account is active"
+                  : "Account is deactivate"}
               </p>
             </div>
           </div>

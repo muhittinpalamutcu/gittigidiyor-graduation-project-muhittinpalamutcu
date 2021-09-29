@@ -2,7 +2,6 @@ import {
   CUSTOMER_REGISTER_FAIL,
   CUSTOMER_REGISTER_REQUEST,
   CUSTOMER_REGISTER_SUCCESS,
-  CUSTOMER_REMOVE_FROM_STORAGE,
   CUSTOMER_SEARCH_BY_IDENTITY_FAIL,
   CUSTOMER_SEARCH_BY_IDENTITY_REQUEST,
   CUSTOMER_SEARCH_BY_IDENTITY_SUCCESS,
@@ -42,8 +41,6 @@ export const register =
         type: CUSTOMER_REGISTER_SUCCESS,
         payload: data,
       });
-
-      localStorage.setItem("customerInfo", JSON.stringify(data));
     } catch (error) {
       dispatch({
         type: CUSTOMER_REGISTER_FAIL,
@@ -54,13 +51,6 @@ export const register =
       });
     }
   };
-
-export const removeExistedCustomerFromStorage = () => (dispatch) => {
-  localStorage.removeItem("customerInfo");
-  dispatch({
-    type: CUSTOMER_REMOVE_FROM_STORAGE,
-  });
-};
 
 export const searchCustomerByIdentity =
   (identityNumber) => async (dispatch) => {

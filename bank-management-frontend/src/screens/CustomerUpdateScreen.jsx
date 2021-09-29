@@ -153,8 +153,8 @@ const CustomerUpdateScreen = () => {
                   <p>Salary : {customerInfoById.salary} TL</p>
                   <p className="text-blue-600 font-bold">
                     {customerInfoById.active
-                      ? "Account active"
-                      : "Account deactivated"}
+                      ? "Account is active"
+                      : "Account is deactivate"}
                   </p>
                 </div>
               ) : (
