@@ -118,7 +118,7 @@ const Nav = () => {
             className="flex px-4 justify-end border-r-4 border-white cursor-pointer"
             onClick={miniMapCreditApplicationHandler}
           >
-            <span>Credit Application</span>
+            <span>Credit</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="w-5 ml-2"
@@ -139,10 +139,10 @@ const Nav = () => {
           <ul className="text-xs border-primary border-r-4">
             <li className="py-1 ">
               <Link
-                to="/"
+                to="/credit-information-inquiry"
                 className="flex px-4 justify-end border-r-4 border-white"
               >
-                <span>Customer Registery</span>
+                <span>Credit Information Inquiry</span>
               </Link>
             </li>
             <li className="py-1">
@@ -150,15 +150,7 @@ const Nav = () => {
                 to="/"
                 className="flex px-4 justify-end border-r-4 border-white"
               >
-                <span>Search Customer</span>
-              </Link>
-            </li>
-            <li className="py-1">
-              <Link
-                to="/"
-                className="flex px-4 justify-end border-r-4 border-white"
-              >
-                <span>Update Customer</span>
+                <span>Credit Application</span>
               </Link>
             </li>
           </ul>

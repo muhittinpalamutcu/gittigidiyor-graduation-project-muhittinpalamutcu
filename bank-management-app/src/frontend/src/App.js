@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Nav from "./components/Nav";
-import CreditApplication from "./screens/CreditApplication";
 import CustomerRegisteryScreen from "./screens/CustomerRegisteryScreen";
 import CustomerSearchScreen from "./screens/CustomerSearchScreen";
 import CustomerUpdateScreen from "./screens/CustomerUpdateScreen";
+import CreditInformationInquiryScreen from "./screens/CreditInformationInquiryScreen";
 
 const App = () => {
   const [newRegistery, setNewRegistery] = useState(false);
@@ -51,7 +51,10 @@ const App = () => {
             />
             <Route path="/customer-search" component={CustomerSearchScreen} />
             <Route path="/customer-update" component={CustomerUpdateScreen} />
-            <Route path="/credit-application" component={CreditApplication} />
+            <Route
+              path="/credit-information-inquiry"
+              component={CreditInformationInquiryScreen}
+            />
           </main>
           <div className="text-center mt-10 font-light text-xs">
             © Copyright 2021 @mui.coding-"Muhittin Palamutçu"
